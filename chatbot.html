@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Chatbot Hewan</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background:#dfe9f3;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+/* BOX CHAT */
+
+.chat-wrapper{
+    width:420px;
+    height:700px;
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,0.2);
+    display:flex;
+    flex-direction:column;
+}
+
+/* HEADER */
+
+.chat-header{
+    background:#1f3c88;
+    color:white;
+    padding:18px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* AREA CHAT */
+
+.chat-container{
+    flex:1;
+    padding:20px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    background:#f4f7fb;
+}
+
+/* MESSAGE */
+
+.message{
+    max-width:75%;
+    padding:12px 15px;
+    border-radius:15px;
+    line-height:1.5;
+    word-wrap:break-word;
+    animation:fadeIn 0.3s ease;
+}
+
+.user{
+    align-self:flex-end;
+    background:#4a90e2;
+    color:white;
+    border-bottom-right-radius:5px;
+}
+
+.bot{
+    align-self:flex-start;
+    background:white;
+    border:1px solid #ddd;
+    color:#333;
+    border-bottom-left-radius:5px;
+}
+
+/* INPUT */
+
+.chat-input{
+    display:flex;
+    padding:15px;
+    background:white;
+    border-top:1px solid #ddd;
+}
+
+.chat-input input{
+    flex:1;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+}
+
+.chat-input button{
+    margin-left:10px;
+    padding:12px 18px;
+    border:none;
+    background:#1f3c88;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.chat-input button:hover{
+    background:#16316f;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="chat-wrapper">
+
+    <div class="chat-header">
+        🐾 Chatbot Informasi Hewan
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+
+        <div class="message bot">
+            Halo 👋<br>
+            Tanya tentang hewan apa saja yaa
+        </div>
+
+    </div>
+
+    <div class="chat-input">
+
+        <input 
+            type="text" 
+            id="userInput"
+            placeholder="Tulis pesan..."
+        >
+
+        <button onclick="sendMessage()">
+            Kirim
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const dataHewan = {
+
+    kucing : "🐱 Kucing adalah hewan mamalia lucu yang suka bermain dan tidur.",
+
+    anjing : "🐶 Anjing adalah hewan setia dan sangat pintar.",
+
+    gajah : "🐘 Gajah adalah hewan darat terbesar di dunia.",
+
+    harimau : "🐯 Harimau adalah hewan buas dengan belang hitam.",
+
+    cendrawasih : "🦜 Burung Cendrawasih terkenal dengan bulunya yang indah dan berasal dari Papua."
+
+};
+
+function addMessage(text, sender){
+
+    const chatContainer = document.getElementById("chatContainer");
+
+    const messageDiv = document.createElement("div");
+
+    messageDiv.classList.add("message");
+    messageDiv.classList.add(sender);
+
+    messageDiv.innerHTML = text;
+
+    chatContainer.appendChild(messageDiv);
+
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+function sendMessage(){
+
+    const input = document.getElementById("userInput");
+
+    const text = input.value.trim();
+
+    if(text === "") return;
+
+    addMessage(text, "user");
+
+    input.value = "";
+
+    setTimeout(() => {
+
+        let balasan = "Maaf 😅 hewan itu belum ada di database.";
+
+        const pesan = text.toLowerCase();
+
+        for(let hewan in dataHewan){
+
+            if(pesan.includes(hewan)){
+
+                balasan = dataHewan[hewan];
+            }
+        }
+
+        addMessage(balasan, "bot");
+
+    }, 500);
+}
+
+/* ENTER */
+
+document
+.getElementById("userInput")
+.addEventListener("keypress", function(e){
+
+    if(e.key === "Enter"){
+
+        sendMessage();
+    }
+});
+
+</script>
+
+</body>
+</html>
